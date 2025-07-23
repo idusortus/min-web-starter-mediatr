@@ -1,0 +1,6 @@
+@MinWebEfCore_HostAddress = http://localhost:5129
+
+GET {{MinWebEfCore_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
