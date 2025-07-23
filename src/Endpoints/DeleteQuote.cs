@@ -1,6 +1,7 @@
 using Api.Abstractions;
 using Api.Domain.Entities;
 using Api.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints;
 

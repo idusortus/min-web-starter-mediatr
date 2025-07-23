@@ -22,6 +22,7 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddProblemDetails();
     builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
     var app = builder.Build();
 

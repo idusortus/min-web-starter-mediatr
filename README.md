@@ -5,3 +5,5 @@
 - Scalar
 - Global Exception Handling
 - Serilog
+
+- MediatR 
