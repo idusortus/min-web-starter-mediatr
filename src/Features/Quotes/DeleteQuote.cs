@@ -9,7 +9,7 @@ public static class DeleteQuote
     // The Command now declares it will return our business outcome enum.
     public record Command(int Id) : IRequest<DeleteStatus>;
     // The Handler deals only with business logic and returns
-    // a simple enum to describe the result. It knows nothing about HTTP.
+    // a simple enum to describe the result. 
     public class Handler(AppDbContext context) : IRequestHandler<Command, DeleteStatus>
     {
         public async Task<DeleteStatus> Handle(Command request, CancellationToken ct)
@@ -29,7 +29,6 @@ public static class DeleteQuote
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            // Note: The route should probably include the ID, e.g., "mediatr/quotes/{id:int}"
             app.MapDelete("mediatr/quotes/{id:int}", async (ISender sender, int id, CancellationToken ct) =>
             {
                 // Create the command to send

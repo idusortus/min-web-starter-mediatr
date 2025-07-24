@@ -4,10 +4,10 @@ using Api.Infrastructure.Persistence;
 using MediatR;
 
 namespace Api.Features.Quotes;
+
 //Note, this VSA feature implementation is different from the others. It
 //  does not enclose the entire slice logic within a static class. See
 //  Readme.md for pros and cons.
-
 public sealed record CreateQuoteCommand(string Content, string Author) : IRequest<HandlerResult>;
 public abstract record HandlerResult;
 public sealed record HappyResult(int NewQuoteId) : HandlerResult;
