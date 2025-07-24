@@ -1,7 +1,6 @@
 using Api.Abstractions;
 using Api.Infrastructure.Persistence;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 public static class GetQuoteById
 {
