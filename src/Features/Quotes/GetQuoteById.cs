@@ -2,7 +2,7 @@ using Api.Application.Abstractions;
 using Api.Infrastructure.Persistence;
 using MediatR;
 
-namespace Api.Application.Features.Quotes;
+namespace Api.Features.Quotes;
 
 public static class GetQuoteById
 {

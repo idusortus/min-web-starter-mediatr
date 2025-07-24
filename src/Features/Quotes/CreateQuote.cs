@@ -3,7 +3,7 @@ using Api.Domain.Entities;
 using Api.Infrastructure.Persistence;
 using MediatR;
 
-namespace Api.Application.Features.Quotes;
+namespace Api.Features.Quotes;
 //Note, this VSA feature implementation is different from the others. It
 //  does not enclose the entire slice logic within a static class. See
 //  Readme.md for pros and cons.

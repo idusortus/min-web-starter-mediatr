@@ -5,7 +5,7 @@ using Api.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;//[FromQuery]
 
-namespace Api.Application.Features.Quotes;
+namespace Api.Features.Quotes;
 
 public static class GetQuotes
 {

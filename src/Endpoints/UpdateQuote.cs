@@ -30,7 +30,7 @@ public class UpdateQuote : IEndpoint
                 existingQuote.Content = qdto.Content;
 
             await context.SaveChangesAsync(ct);
-            return Results.NoContent();
+            return Results.Ok(existingQuote);
 
         })
         .WithTags("Quotes");
