@@ -1,4 +1,4 @@
-using Api.Abstractions;
+using Api.Application.Abstractions;
 using Api.Domain.Entities;
 using Api.Infrastructure.Persistence;
 using Microsoft.VisualBasic;
@@ -19,7 +19,7 @@ public class CreateQuote : IEndpoint
             var newQuote = new Quote { Content = quote.Content, Author = quote.Author };
             var result = await context.Quotes.AddAsync(newQuote, ct);
             await context.SaveChangesAsync(ct);
-            return Results.CreatedAtRoute("GetQuoteById", new { id = newQuote.Id });
+            return Results.CreatedAtRoute("GetQuoteById", new { id = newQuote.Id }, newQuote.Id);
         })
         .WithTags("Quotes");
     }

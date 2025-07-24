@@ -1,4 +1,4 @@
-using Api.Abstractions;
+using Api.Application.Abstractions;
 using Api.Domain.Entities;
 using Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;

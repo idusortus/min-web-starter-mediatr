@@ -1,46 +1,57 @@
-using Api.Abstractions;
-using Api.Domain.Entities; // Assuming your Quote entity is in this namespace
+using Api.Application.Abstractions;
+using Api.Domain.Entities; 
 using Api.Infrastructure.Persistence;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
-public static class CreateQuote
+namespace Api.Application.Features.Quotes;
+
+// Command and Result definitions
+public sealed record CreateQuoteCommand(string Content, string Author) : IRequest<HandlerResult>;
+public abstract record HandlerResult;
+public sealed record HappyResult(int NewQuoteId) : HandlerResult;
+public sealed record FailResult(string ErrorMessage) : HandlerResult;
+
+// Handler
+public sealed class CreateQuoteHandler(AppDbContext dbContext) : IRequestHandler<CreateQuoteCommand, HandlerResult>
 {
-    public record Command(string Content, string Author) : IRequest<int>;
-
-    public class Handler(AppDbContext context) : IRequestHandler<Command, int>
+    public async Task<HandlerResult> Handle(CreateQuoteCommand request, CancellationToken cancellationToken)
     {
-        public async Task<int> Handle(Command request, CancellationToken cancellationToken)
+        if (string.IsNullOrWhiteSpace(request.Content) || string.IsNullOrWhiteSpace(request.Author))
+            return new FailResult("Author and Content are both required.");
+        
+        if (request.Content.Length < 6 || request.Author.Length < 6)
+            return new FailResult("Author and Content must be at least six characters long.");
+        
+        var quote = new Quote
         {
-            var quote = new Quote
-            {
-                Content = request.Content,
-                Author = request.Author
-            };
+            Content = request.Content,
+            Author = request.Author
+        };
 
-            context.Quotes.Add(quote);
+        dbContext.Quotes.Add(quote);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
-            await context.SaveChangesAsync(cancellationToken);
-            return quote.Id;
-        }
+        return new HappyResult(quote.Id);
     }
+}
 
-    public class CreateQuoteEndpoint : IEndpoint
+// Endpoint registration
+public sealed class CreateQuoteEndpoint : IEndpoint
+{
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        public void MapEndpoint(IEndpointRouteBuilder app)
+        app.MapPost("/quotes", async (ISender sender, CreateQuoteCommand command) =>
         {
-            app.MapPost("/mediatr/quotes", async (ISender sender,  Command command) =>
+            var result = await sender.Send(command);
+
+            return result switch
             {
-                if (command.Content is null || command.Author is null)
-                    return Results.BadRequest("Author and Content are required.");
-                if (command.Content.Length < 6 || command.Author.Length < 6)
-                    return Results.BadRequest("Author and Content must have at least six characters.");
-                var newQuoteId = await sender.Send(command);
-                
-                return Results.CreatedAtRoute("GetQuoteByIdMediator", new { id = newQuoteId });
-            })
-            .WithTags("mediatr")
-            .WithName("CreateQuoteMediatR");
-        }
+                HappyResult s => Results.CreatedAtRoute("GetQuoteById", new { id = s.NewQuoteId }),
+                FailResult f => Results.BadRequest(f.ErrorMessage),
+                _ => Results.StatusCode(500)
+            };
+        })
+        .WithTags("Quotes")
+        .WithName("CreateQuote");
     }
 }

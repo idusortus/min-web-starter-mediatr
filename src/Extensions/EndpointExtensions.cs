@@ -1,5 +1,5 @@
 using System.Reflection;
-using Api.Abstractions;
+using Api.Application.Abstractions;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace Api.Extensions;
 

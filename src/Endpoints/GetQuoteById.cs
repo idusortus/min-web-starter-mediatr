@@ -1,4 +1,4 @@
-using Api.Abstractions;
+using Api.Application.Abstractions;
 using Api.Infrastructure.Persistence;
 
 namespace Api.Endpoints;
